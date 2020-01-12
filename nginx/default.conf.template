@@ -1,0 +1,11 @@
+server {
+  absolute_redirect off;
+  location / {
+    root /usr/share/nginx/html/;
+    try_files $uri $uri/ /index.html =404;
+  }
+  location /api/ {
+      proxy_set_header PRIVATE-TOKEN ${GITLAB_API_TOKEN};
+      proxy_pass ${GITLAB_BASE_URL};
+  }  
+}
