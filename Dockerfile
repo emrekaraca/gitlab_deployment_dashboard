@@ -1,5 +1,5 @@
-FROM node:lts as build
-RUN apt-get update && apt-get install -y wget zip unzip
+FROM node:lts-alpine as build
+RUN apk add --update wget zip unzip
 RUN wget https://github.com/emrekaraca/gitlab_deployment_dashboard/archive/master.zip -O /tmp/gitlab_deployment_dashboard.zip
 RUN unzip /tmp/gitlab_deployment_dashboard.zip -d /tmp/
 RUN rm /tmp/gitlab_deployment_dashboard.zip
