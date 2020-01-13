@@ -105,7 +105,10 @@ const EnvironmentData = ({environment, project}) => {
   return (<div className="flex h-full">
     <div className="flex h-full items-center bg-green-500 p-2 mr-2" ><p>{environmentData.last_deployment ? environmentData.last_deployment.ref : ""}</p></div>
     <div className="flex flex-col h-full bg-green-500 p-2 mr-2" ><p >{environmentData.last_deployment ? moment(environmentData.last_deployment.deployable.finished_at).format('LLLL') : ""}</p><p >{environmentData.last_deployment ? moment(environmentData.last_deployment.deployable.finished_at).fromNow() : ""}</p></div>
-    <div className="flex h-full items-center bg-green-500 p-2" ><p>{environmentData.last_deployment ? environmentData.last_deployment.user.name : ""}</p></div>
+    <div className="flex h-full items-center bg-green-500 p-2" >
+      <img className="w-12 mr-4" src={environmentData.last_deployment.deployable.user.avatar_url} alt=""/>
+      <p>{environmentData.last_deployment ? environmentData.last_deployment.deployable.user.name : ""}</p>
+    </div>
   </div>
   )
 }
