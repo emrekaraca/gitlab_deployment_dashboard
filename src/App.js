@@ -13,11 +13,8 @@ const ProjectsList = () => {
   useEffect(() => {
     async function getProjects() {
       const {data:projectsList} = await axiosInstance.get(`/projects?order_by=last_activity_at&simple=true&min_access_level=10&per_page=1000`)
-      console.log(projectsList)
       const projectIds = projectsList.map(project => project.id)
-      console.log(projectIds)
       const projectsData = await Promise.all(projectIds.map(id => axiosInstance.get(`/projects/${id}`)))
-      console.log(projectsData.map(project => project.data))
       setProjects(projectsData.map(project => project.data))
     }
     getProjects()
@@ -107,7 +104,8 @@ const EnvironmentData = ({environment, project}) => {
 
   return (<div className="flex h-full">
     <div className="flex h-full items-center bg-green-500 p-2 mr-2" ><p>{environmentData.last_deployment ? environmentData.last_deployment.ref : ""}</p></div>
-    <div className="flex flex-col h-full bg-green-500 p-2" ><p >{environmentData.last_deployment ? moment(environmentData.last_deployment.created_at).format('LLLL') : ""}</p><p >{environmentData.last_deployment ? moment(environmentData.last_deployment.created_at).fromNow() : ""}</p></div>
+    <div className="flex flex-col h-full bg-green-500 p-2 mr-2" ><p >{environmentData.last_deployment ? moment(environmentData.last_deployment.created_at).format('LLLL') : ""}</p><p >{environmentData.last_deployment ? moment(environmentData.last_deployment.created_at).fromNow() : ""}</p></div>
+    <div className="flex h-full items-center bg-green-500 p-2" ><p>{environmentData.last_deployment ? environmentData.last_deployment.user.name : ""}</p></div>
   </div>
   )
 }
