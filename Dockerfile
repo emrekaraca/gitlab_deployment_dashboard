@@ -1,6 +1,12 @@
-FROM node:lts-alpine as build
+FROM node:lts as build
+RUN apt-get update && apt-get install -y wget zip unzip
+RUN wget https://github.com/emrekaraca/gitlab_deployment_dashboard/archive/master.zip -O /tmp/gitlab_deployment_dashboard.zip
+RUN unzip /tmp/gitlab_deployment_dashboard.zip -d /tmp/
+RUN rm /tmp/gitlab_deployment_dashboard.zip
+RUN mkdir -p app
+RUN mv /tmp/gitlab_deployment_dashboard-master/* /app/
+RUN rm -R /tmp/gitlab_deployment_dashboard-master/
 WORKDIR /app
-COPY . .
 RUN npm install
 RUN npm run build:style
 RUN npm run build
