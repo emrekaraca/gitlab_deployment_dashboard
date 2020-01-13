@@ -78,7 +78,7 @@ const Project = ({project}) => {
 
 const Environment = ({environment, project}) => {
   
-  return (
+  return environment.state === "available" ? (
     <div className="flex h-16 my-2">
       <div className="flex items-center h-full bg-gray-500 p-2">
         <h3 className="text-xl w-48">
@@ -86,7 +86,7 @@ const Environment = ({environment, project}) => {
         </h3>
       </div>
       <EnvironmentData environment={environment} project={project} />
-    </div>)
+    </div>) : ""
 }
 
 const EnvironmentData = ({environment, project}) => {
