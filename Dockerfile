@@ -24,12 +24,12 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 
 
-FROM nginx:stable as dev_nginx_server
-COPY ./nginx/nginx.conf /etc/nginx/
-COPY ./nginx/dev.conf.template /etc/nginx/conf.d/default.conf.template
-COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# FROM nginx:stable as dev_nginx_server
+# COPY ./nginx/nginx.conf /etc/nginx/
+# COPY ./nginx/dev.conf.template /etc/nginx/conf.d/default.conf.template
+# COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+# RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-EXPOSE 80
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+# EXPOSE 80
+# ENTRYPOINT ["docker-entrypoint.sh"]
+# CMD ["nginx", "-g", "daemon off;"]
