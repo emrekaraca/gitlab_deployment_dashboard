@@ -1,0 +1,10 @@
+server {
+  absolute_redirect off;
+  location / {
+    proxy_pass http://dev_node_server:3000;
+  }
+  location /api/ {
+      proxy_set_header PRIVATE-TOKEN ${GITLAB_API_TOKEN};
+      proxy_pass ${GITLAB_BASE_URL};
+  }  
+}
