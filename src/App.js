@@ -21,9 +21,13 @@ const ProjectsList = () => {
   }, [])  
 
   return projects.length > 0 ? (
-    <div className="w-full h-full min-h-screen bg-orange-400 p-4">
+    <div className="w-full h-full min-h-screen">
+      <nav className="w-full h-16 bg-purple-900">
+        <div className="container mx-auto h-full flex justify-start items-center">
+          <h3 className="text-lg text-white font">Giltab Deployment Dashboard</h3>
+        </div>
+      </nav>
       <div className="container mx-auto">
-        <h1 className="text-4xl font-bold">Projects</h1>
         <ul>
           {projects.map(project => <Project project={project} key={project.id} />)}
         </ul>
@@ -64,13 +68,25 @@ const Project = ({project}) => {
     requestEnvironments().catch(() => console.log("error for project id: ", project.id))
   }, [project.id])  
   
-  return environments.length > 0 ? (<li className="flex flex-col my-4 shadow rounded-sm bg-gray-100">
-    <div className="flex items-center p-4">
+  return environments.length > 0 ? (<li className="flex flex-col my-4 shadow hover:shadow-lg rounded-sm bg-gray-100 border-l-4 border-transparent hover:border-purple-900" style={{transition: "0.2s"}}>
+    <a className="flex items-center p-4 cursor-pointer" href={project.web_url} target="_blank">
       {project.avatar_url ? <img src={project.avatar_url} alt="" className="w-12 mr-4" /> : <div className="bg-gray-300 w-12 h-12 mr-4 rounded" />}
       <h2 className="text-2xl font-semibold">{project.name_with_namespace} <span className="font-normal text-base">(id: {project.id})</span></h2>
-    </div>
-    <div className="flex flex-col bg-gray-300 p-4">
-        {sortAndFilterEnvironments(environments).map(environment => <Environment environment={environment} project={project} key={environment.id} />)}
+    </a>
+    <div className="p-2">
+      <table className="w-full p-2">
+        <thead>
+          <tr className="border-b-2 border-gray-400">
+            <th className="py-2 ">Environment</th>
+            <th className="py-2 ">Branch-name</th>
+            <th className="py-2 ">Latest Deploy</th>
+            <th className="py-2 ">Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortAndFilterEnvironments(environments).map(environment => <Environment environment={environment} project={project} key={environment.id} />)}
+        </tbody>
+      </table>
     </div>
   </li>) : ""
 }
@@ -79,14 +95,14 @@ const Project = ({project}) => {
 const Environment = ({environment, project}) => {
   
   return environment.state === "available" ? (
-    <div className="flex h-16 my-2">
-      <div className="flex items-center h-full bg-gray-500 p-2">
-        <h3 className="text-xl w-48">
-          {environment.name.toUpperCase()}
-        </h3>
-      </div>
+    <tr className="border-b-2 border-gray-300 py-2">
+      <td className="">
+        <a className="font-bold w-36 cursor-pointer" target="_blank" href={environment.external_url}>
+          {environment.name.charAt(0).toUpperCase() + environment.name.slice(1)}
+        </a>
+      </td>
       <EnvironmentData environment={environment} project={project} />
-    </div>) : ""
+    </tr>) : ""
 }
 
 const EnvironmentData = ({environment, project}) => {
@@ -102,14 +118,21 @@ const EnvironmentData = ({environment, project}) => {
     requestEnvironmentData()
   }, [environment.id, environment.project.id, project.id])  
 
-  return environmentData.last_deployment ? (<div className="flex h-full">
-    <div className="flex h-full items-center bg-green-500 p-2 mr-2" ><p>{environmentData.last_deployment.ref}</p></div>
-    <div className="flex flex-col h-full bg-green-500 p-2 mr-2" ><p >{moment(environmentData.last_deployment.deployable.finished_at).format('LLLL')}</p><p >{moment(environmentData.last_deployment.deployable.finished_at).fromNow()}</p></div>
-    <div className="flex h-full items-center bg-green-500 p-2" >
-      <img className="w-12 mr-4" src={environmentData.last_deployment.deployable.user.avatar_url} alt=""/>
-      <p>{environmentData.last_deployment.deployable.user.name}</p>
-    </div>
-  </div>
+  return environmentData.last_deployment ? (<>
+    <td><a href={`${project.web_url}/tree/${environmentData.last_deployment.ref}`} target="_blank"><code className="bg-gray-300 py-1 px-2 rounded">{environmentData.last_deployment.ref}</code></a></td>
+    <td>
+      <a href={environmentData.last_deployment.deployable.pipeline.web_url} target="_blank" className="cursor-pointer">
+        <p >{moment(environmentData.last_deployment.deployable.finished_at).fromNow()}</p>
+        <p className="text-sm text-gray-700">{moment(environmentData.last_deployment.deployable.finished_at).format('DD.MM.YYYY HH:mm')}h</p>
+      </a>
+    </td>
+    <td>
+      <a href={environmentData.last_deployment.deployable.user.web_url} target="_blank" className="flex content-center cursor-pointer">
+        <img className="w-8 h-8 mr-2 rounded-full" src={environmentData.last_deployment.deployable.user.avatar_url} alt=""/>
+        <p>{environmentData.last_deployment.deployable.user.name}</p>
+      </a>
+    </td>
+    </>
   ) : ""
 }
 
