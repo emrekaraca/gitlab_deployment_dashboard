@@ -128,7 +128,7 @@ const EnvironmentData = ({environment, project}) => {
       </a>
     </td>
     <td className="py-2">
-      <a href={`${project.web_url}/commits/${environmentData.last_deployment.deployable.commit.id}`} target="_blank" className="cursor-pointer">
+      <a href={`${project.web_url}/commit/${environmentData.last_deployment.deployable.commit.id}`} target="_blank" className="cursor-pointer">
       <code className="bg-gray-300 py-1 px-2 rounded">{environmentData.last_deployment.deployable.commit.short_id}</code>
       <div className="flex content-center mt-4">
         <img className="w-6 h-6 mr-2 rounded-full" src={environmentData.last_deployment.deployable.user.avatar_url} alt=""/>
